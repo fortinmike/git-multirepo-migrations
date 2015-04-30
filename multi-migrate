@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+
+version = ARGV[0]
+
+unless version
+  puts "Please specify a migration version"
+  exit 1
+end
+
+migration_file = "migration-#{version}.rb"
+
+unless File.exists?(File.join(File.dirname(__FILE__), migration_file))
+  puts "No migration script exists for version #{version}"
+  exit 1
+end
+
+puts "Performing migration to version #{version} ..."
+
+require_relative migration_file
+
+puts "Locating multirepo-enabled repositories..."
+multirepo_files = Dir.glob("**/*/.multirepo")
+
+multirepo_files.each do |file|
+	repo_path = File.join(Dir.pwd, File.dirname(file))
+	
+	puts "Migrating #{repo_path} to git-multirepo version #{version}"
+	
+	previous_directory = Dir.pwd
+	Dir.chdir(repo_path)
+	
+	Migration.run(repo_path)
+	
+	Dir.chdir(previous_directory)
+end
