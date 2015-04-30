@@ -5,10 +5,9 @@ require "fileutils"
 directories = Dir.glob('*').select {|f| File.directory? f}
 directories.each do |dir|
 	full_path = File.join(Dir.pwd, dir)
-	enabled = Dir.glob(File.join(full_path, ".multirepo")).any?
-	next unless enabled
+	next unless Dir.glob(File.join(full_path, ".multirepo")).any?
 	
-	puts "Migrating multirepo-enabled directory #{dir}" if enabled
+	puts "Migrating multirepo-enabled directory #{dir}"
 	
 	previous_directory = Dir.pwd
 	Dir.chdir(full_path)
