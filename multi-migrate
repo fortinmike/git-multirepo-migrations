@@ -7,9 +7,10 @@ unless version
   exit 1
 end
 
-migration_file = "migration-#{version}.rb"
+migration_filename = "migration-#{version}.rb"
+migration_file = File.join(File.dirname(__FILE__), migration_filename)
 
-unless File.exists?(File.join(File.dirname(__FILE__), migration_file))
+unless File.exists?(migration_file)
   puts "No migration script exists for version #{version}"
   exit 1
 end
