@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+require "fileutils"
+
+directories = Dir.glob('*').select {|f| File.directory? f}
+directories.each do |dir|
+	full_path = File.join(Dir.pwd, dir)
+	enabled = Dir.glob(File.join(full_path, ".multirepo")).any?
+	next unless enabled
+	
+	puts "Migrating multirepo-enabled directory #{dir}" if enabled
+	
+	previous_directory = Dir.pwd
+	Dir.chdir(full_path)
+	FileUtils.rm_f(".git/hooks/prepare-commit-msg")
+	FileUtils.rm_f(".git/hooks/post-merge")
+	system('multi init --extras')
+	Dir.chdir(previous_directory)
+end
