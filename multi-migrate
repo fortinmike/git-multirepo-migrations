@@ -23,14 +23,14 @@ puts "Locating multirepo-enabled repositories..."
 multirepo_files = Dir.glob("**/*/.multirepo")
 
 multirepo_files.each do |file|
-	repo_path = File.join(Dir.pwd, File.dirname(file))
-	
-	puts "Migrating #{repo_path} to git-multirepo version #{version}"
-	
-	previous_directory = Dir.pwd
-	Dir.chdir(repo_path)
-	
-	Migration.run(repo_path)
-	
-	Dir.chdir(previous_directory)
+  repo_path = File.join(Dir.pwd, File.dirname(file))
+  
+  puts "Migrating #{repo_path} to git-multirepo version #{version}"
+  
+  previous_directory = Dir.pwd
+  Dir.chdir(repo_path)
+  
+  Migration.run(repo_path)
+  
+  Dir.chdir(previous_directory)
 end
