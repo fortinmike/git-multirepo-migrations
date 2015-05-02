@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require_relative "core"
+
 version = ARGV[0]
 
 unless version
@@ -15,22 +17,20 @@ unless File.exists?(migration_file)
   exit 1
 end
 
-puts "Performing migration to version #{version} ..."
+puts "Performing migration to version #{version}"
 
 require_relative migration_file
 
 puts "Locating multirepo-enabled repositories..."
 multirepo_files = Dir.glob("**/*/.multirepo")
+multirepo_repos = multirepo_files.map { |f| File.join(Dir.pwd, File.dirname(f)) }
 
-multirepo_files.each do |file|
-  repo_path = File.join(Dir.pwd, File.dirname(file))
-  
-  puts "Migrating #{repo_path} to git-multirepo version #{version}"
-  
-  previous_directory = Dir.pwd
-  Dir.chdir(repo_path)
-  
-  Migration.run(repo_path)
-  
-  Dir.chdir(previous_directory)
+puts "Migrate the following multirepo-enabled repositories?"
+multirepo_repos.each { |r| puts "--> #{r}" }
+
+exit 1 unless ask_yes_no("Proceed?")
+
+multirepo_repos.each do |repo|
+  puts "Migrating #{repo} to git-multirepo version #{version}"
+  perform_migration(Migration, repo)
 end
