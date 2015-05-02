@@ -25,7 +25,7 @@ puts "Locating multirepo-enabled repositories..."
 multirepo_files = Dir.glob("**/*/.multirepo")
 multirepo_repos = multirepo_files.map { |f| File.join(Dir.pwd, File.dirname(f)) }
 
-puts "The following multirepo-enabled repositories would be migrated:"
+puts "The following multirepo-enabled repositories will be migrated:"
 multirepo_repos.each { |r| puts "--> #{r}" }
 
 exit 1 unless ask_yes_no("Proceed?")
