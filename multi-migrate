@@ -34,7 +34,7 @@ end
 MultiRepo::Console.log_info("The following multirepo-enabled repositories will be migrated:")
 multirepo_repos.each { |r| puts "--> #{r}" }
 
-exit 1 unless MultiRepo::Console.ask_yes_no("Proceed?")
+exit 1 unless MultiRepo::Console.ask("Proceed?")
 
 multirepo_repos.each do |repo|
   MultiRepo::Console.log_substep("Migrating #{repo} to git-multirepo version #{version}")
